@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template Tavola di Gara — A3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #1A2B4A;
+  --accent: #2B5EA7;
+  --gold:   #C8A84B;
+  --light:  #F4F5F7;
+  --border: #CBD0D8;
+  --text:   #1C1C1C;
+  --muted:  #6B7280;
+  --white:  #FFFFFF;
+  --font:       "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-label: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:var(--font);background:#181818;
+  display:flex;flex-direction:column;align-items:center;
+  padding:24px 16px 72px;gap:16px;min-height:100vh;
+}
+
+/* TOOLBAR */
+.toolbar{
+  width:100%;max-width:1320px;background:#111;
+  border:1px solid #2A2A2A;border-radius:10px;
+  padding:10px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.tb-title{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-right:auto;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.tb-lbl{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.tb-sel,.tb-inp{background:#1E1E1E;border:1px solid #333;border-radius:4px;color:#CCC;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:11px;padding:5px 8px;cursor:pointer;}
+.tb-btn{background:var(--accent);border:none;border-radius:4px;color:white;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;padding:6px 14px;cursor:pointer;letter-spacing:.05em;transition:opacity 120ms;white-space:nowrap;}
+.tb-btn:hover{opacity:.8;}
+.tb-btn.sec{background:#2A2A2A;}
+.tb-btn.edit-on{background:#3D2800;border:1.5px solid var(--gold);color:var(--gold);}
+.tb-div{width:1px;height:22px;background:#2A2A2A;}
+
+/* RESTORE BAR */
+.restore-bar{
+  width:100%;max-width:1320px;background:#1E1500;
+  border:1px solid #4A3300;border-radius:8px;
+  padding:9px 16px;display:none;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.restore-bar.on{display:flex;}
+.rb-lbl{font-size:9px;font-weight:700;color:#998055;letter-spacing:.1em;text-transform:uppercase;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.rb-chip{
+  background:#2A1800;border:1px solid #7B5500;border-radius:20px;
+  padding:3px 11px;font-size:9px;font-weight:600;color:var(--gold);
+  cursor:pointer;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;transition:background 100ms;
+}
+.rb-chip:hover{background:#3E2200;}
+.rb-all{margin-left:auto;background:#2E2E2E;border:none;border-radius:4px;color:#888;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:9px;font-weight:600;padding:4px 12px;cursor:pointer;}
+.rb-all:hover{color:#CCC;}
+
+/* SHEET */
+.sheet-wrap{width:100%;max-width:1320px;}
+.sheet-lbl{font-size:9px;color:#444;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;padding-left:2px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+
+.tavola{
+  width:100%;aspect-ratio:420/297;
+  background:var(--white);border:1px solid #383838;
+  position:relative;display:flex;flex-direction:column;
+  overflow:hidden;box-shadow:0 10px 50px rgba(0,0,0,.55);
+}
+.tavola.em{outline:2.5px solid var(--gold);outline-offset:3px;}
+
+.abar{height:3px;background:var(--gold);flex-shrink:0;}
+
+/* HEADER */
+.hdr{display:flex;height:13%;border-bottom:1.5px solid var(--navy);flex-shrink:0;}
+.hdr-logo{width:13%;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;gap:2px;}
+.l-main{color:white;font-size:clamp(9px,1.8vw,22px);font-weight:800;letter-spacing:.2em;font-family:var(--font-label);line-height:1;}
+.l-sub{color:var(--gold);font-size:clamp(4px,.55vw,7px);font-weight:500;letter-spacing:.22em;text-transform:uppercase;font-family:var(--font-label);text-align:center;}
+.hdr-proj{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(6px,1.2%,16px);border-right:1px solid var(--border);gap:2px;}
+.p-ey{font-size:clamp(4px,.48vw,6px);font-weight:700;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-family:var(--font-label);}
+.p-ttl{font-size:clamp(7px,1.05vw,13px);font-weight:700;color:var(--navy);line-height:1.2;font-family:var(--font);}
+.p-sub{font-size:clamp(4px,.52vw,6.5px);color:var(--muted);font-weight:400;font-family:var(--font-label);line-height:1.3;}
+.hdr-meta{display:flex;flex-direction:column;width:26%;flex-shrink:0;}
+.mrow{display:flex;flex:1;border-bottom:1px solid var(--border);}
+.mrow:last-child{border-bottom:none;}
+.mcell{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(4px,.7%,9px);border-right:1px solid var(--border);}
+.mcell:last-child{border-right:none;}
+.ml{font-size:clamp(3.5px,.42vw,5.5px);font-weight:700;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-family:var(--font-label);line-height:1;}
+.mv{font-size:clamp(4.5px,.58vw,7.5px);font-weight:600;color:var(--text);font-family:var(--font);line-height:1.25;margin-top:1px;}
+
+/* BODY */
+.body{flex:1;display:flex;overflow:hidden;}
+.spine{width:4.5%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
+.sp-lbl{writing-mode:vertical-rl;transform:rotate(180deg);font-size:clamp(4px,.5vw,6.5px);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);font-family:var(--font-label);}
+.sp-line{position:absolute;top:0;right:0;width:2.5px;height:100%;background:var(--gold);}
+
+/* GRID */
+.cgrid{flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;overflow:hidden;}
+
+/* CELL */
+.cell{
+  border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;background:var(--white);
+  position:relative;
+}
+.cell.gone{display:none!important;}
+.cell.sc2{grid-column:span 2;}
+.cell.sr2{grid-row:span 2;}
+
+.cell-hdr{background:var(--light);border-bottom:1px solid var(--navy);padding:clamp(2px,.4%,5px) clamp(3px,.6%,8px);display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.cnum{width:clamp(10px,1.4vw,16px);height:clamp(10px,1.4vw,16px);background:var(--navy);color:white;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:clamp(4.5px,.55vw,7px);font-weight:700;flex-shrink:0;font-family:var(--font-label);}
+.cttl{font-size:clamp(4.5px,.58vw,7.5px);font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-label);line-height:1;outline:none;min-width:4px;}
+.cttl:focus{background:rgba(43,94,167,.09);border-radius:2px;padding:0 2px;}
+.csc{font-size:clamp(3.5px,.42vw,5.5px);color:var(--muted);font-weight:500;margin-left:auto;font-family:var(--font-label);letter-spacing:.04em;outline:none;min-width:4px;}
+.csc:focus{background:rgba(43,94,167,.09);border-radius:2px;padding:0 2px;}
+
+.cell-body{flex:1;padding:clamp(3px,.5%,7px);display:flex;align-items:center;justify-content:center;position:relative;}
+
+.phz{
+  width:100%;height:100%;border:1px dashed var(--border);border-radius:2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  background:repeating-linear-gradient(45deg,transparent,transparent 5px,rgba(203,208,216,.10) 5px,rgba(203,208,216,.10) 10px);
+  position:relative;overflow:hidden;
+}
+.phi{font-size:clamp(12px,2vw,26px);opacity:.15;}
+.pht{font-size:clamp(4px,.48vw,6px);color:var(--muted);font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.55;font-family:var(--font-label);}
+.phs{font-size:clamp(3.5px,.4vw,5.5px);color:var(--accent);font-weight:700;letter-spacing:.06em;opacity:.65;font-family:var(--font-label);}
+
+.north{position:absolute;top:clamp(3px,.5%,6px);right:clamp(3px,.5%,6px);display:flex;flex-direction:column;align-items:center;gap:1px;opacity:.45;}
+.north svg{width:clamp(8px,1.1vw,14px);height:clamp(8px,1.1vw,14px);}
+.north-n{font-size:clamp(3.5px,.4vw,5.5px);font-weight:800;color:var(--text);font-family:var(--font-label);}
+
+.sbar{position:absolute;bottom:clamp(3px,.5%,6px);right:clamp(3px,.5%,6px);display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.sbt{display:flex;height:clamp(2px,.35vw,5px);}
+.sbs{width:clamp(12px,1.8vw,24px);border:1px solid var(--text);}
+.sbs:nth-child(odd){background:var(--text);}
+.sbs:nth-child(even){background:transparent;}
+.sbl{display:flex;justify-content:space-between;width:100%;font-size:clamp(3px,.32vw,4.5px);color:var(--text);font-family:var(--font-label);}
+
+/* CELL OVERLAY */
+.cov{
+  display:none;position:absolute;inset:0;
+  background:rgba(0,0,0,.58);backdrop-filter:blur(2px);
+  z-index:10;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+}
+.em .cell:not(.gone) .cov{display:flex;}
+.cov-lbl{font-size:clamp(5px,.65vw,9px);font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.14em;text-transform:uppercase;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.cov-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;}
+.cob{border:none;border-radius:4px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:clamp(5px,.6vw,8px);font-weight:700;padding:clamp(3px,.4%,5px) clamp(5px,.7%,10px);cursor:pointer;letter-spacing:.06em;transition:opacity 100ms;white-space:nowrap;}
+.cob:hover{opacity:.78;}
+.cob.del{background:#B83232;color:white;}
+.cob.ecol{background:#1A6FA8;color:white;}
+.cob.erow{background:#227A44;color:white;}
+.cob.rst{background:#555;color:white;}
+
+/* expand state toggle indicator */
+.cell.sc2 .cob.ecol{background:#0D3D5E;}
+.cell.sr2 .cob.erow{background:#0D3D20;}
+
+/* CARTOUCHE */
+.cart{width:11%;border-left:1.5px solid var(--navy);display:flex;flex-direction:column;flex-shrink:0;background:var(--white);}
+.cblk{border-bottom:1px solid var(--border);padding:clamp(3px,.5%,6px) clamp(3px,.55%,7px);display:flex;flex-direction:column;gap:1px;}
+.cblk:last-child{border-bottom:none;flex:1;display:flex;flex-direction:column;justify-content:flex-end;}
+.clbl{font-size:clamp(3px,.36vw,5px);font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-family:var(--font-label);line-height:1;}
+.cval{font-size:clamp(4px,.5vw,6.5px);font-weight:600;color:var(--text);font-family:var(--font);line-height:1.25;}
+.cval.big{font-size:clamp(9px,1.3vw,16px);font-weight:800;color:var(--navy);}
+.cval.acc{color:var(--accent);}
+.revt{width:100%;border-collapse:collapse;margin-top:2px;}
+.revt th{font-size:clamp(3px,.33vw,4.5px);font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);padding:1px 2px;text-align:left;font-family:var(--font-label);}
+.revt td{font-size:clamp(3px,.33vw,4.5px);color:var(--text);padding:1px 2px;border-bottom:1px solid var(--light);font-family:var(--font-label);}
+
+/* FOOTER */
+.foot{height:8%;border-top:1.5px solid var(--navy);display:flex;flex-shrink:0;background:var(--light);}
+.fcell{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(5px,.8%,10px);border-right:1px solid var(--border);gap:1px;}
+.fcell:last-child{border-right:none;}
+.flbl{font-size:clamp(3px,.36vw,5px);font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-label);line-height:1;}
+.fval{font-size:clamp(4px,.48vw,6px);font-weight:500;color:var(--text);font-family:var(--font);line-height:1.2;}
+.fpg{min-width:7%;max-width:9%;background:var(--navy);justify-content:center;align-items:center;}
+.fpg .flbl{color:rgba(255,255,255,.4);}
+.fpg .fval{font-size:clamp(8px,1.2vw,15px);font-weight:800;color:white;font-family:var(--font-label);}
+
+/* GALLERY */
+.gal-sec{width:100%;max-width:1320px;}
+.gal-ttl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#444;margin-bottom:10px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
+.tcard{background:#111;border:1.5px solid #252525;border-radius:7px;overflow:hidden;cursor:pointer;transition:border-color 140ms,transform 140ms;}
+.tcard:hover{border-color:#484848;transform:translateY(-2px);}
+.tcard.on{border-color:var(--gold)!important;}
+.tc-hdr{padding:8px 12px 6px;border-bottom:1px solid #1A1A1A;}
+.tc-name{font-size:10px;font-weight:700;color:#DDD;letter-spacing:.06em;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.tc-font{font-size:8px;color:#555;margin-top:1px;letter-spacing:.04em;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.tc-desc{font-size:8px;color:#444;margin-top:2px;line-height:1.4;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.tc-sw{display:flex;height:16px;}
+.tc-s{flex:1;}
+.tc-prev{padding:7px 12px;display:flex;flex-direction:column;gap:2px;}
+.tcp-lbl{font-size:7px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.5;}
+.tcp-ttl{font-size:11px;font-weight:700;line-height:1.2;}
+.tcp-sub{font-size:9px;font-weight:400;opacity:.6;line-height:1.4;}
+
+/* INFO */
+.info-sec{width:100%;max-width:1320px;background:#111;border:1px solid #222;border-radius:8px;padding:14px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.il{font-size:8px;font-weight:700;color:#C8A84B;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #1E1E1E;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.ii{font-size:9px;color:#555;line-height:1.9;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+.ii strong{color:#999;font-weight:600;}
+
+@media print{
+  body{background:white;padding:0;}
+  .toolbar,.gal-sec,.info-sec,.sheet-lbl,.restore-bar{display:none!important;}
+  .sheet-wrap{max-width:100%;}
+  .tavola{box-shadow:none;border:.5pt solid #999;outline:none!important;}
+  .cov{display:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <span class="tb-title">Tavola Gara · A3 Landscape · 420×297 mm</span>
+
+  <span class="tb-lbl">Layout</span>
+  <select class="tb-sel" id="layoutSel" onchange="switchLayout(this.value)">
+    <option value="2x3">2×3 celle</option>
+    <option value="1x3">1×3 celle</option>
+    <option value="2x2">2×2 celle</option>
+    <option value="free">Zona unica</option>
+  </select>
+
+  <div class="tb-div"></div>
+  <span class="tb-lbl">N° Tav.</span>
+  <input class="tb-inp" id="tavNum" type="text" value="01" style="width:44px" oninput="updateMeta()">
+  <span class="tb-lbl">Scala</span>
+  <select class="tb-sel" id="scaleSel" onchange="updateMeta()">
+    <option>1:50</option><option>1:100</option><option selected>1:200</option>
+    <option>1:500</option><option>1:1000</option><option>NTS</option>
+  </select>
+
+  <div class="tb-div"></div>
+  <button class="tb-btn" id="emBtn" onclick="toggleEM()">✏️ Modifica Celle</button>
+  <div class="tb-div"></div>
+  <button class="tb-btn sec" onclick="window.print()">⎙ PDF</button>
+  <button class="tb-btn sec" onclick="showGuide()">ℹ Guida</button>
+</div>
+
+<!-- RESTORE BAR -->
+<div class="restore-bar" id="rbar">
+  <span class="rb-lbl">Celle eliminate:</span>
+  <span id="rchips"></span>
+  <button class="rb-all" onclick="restoreAll()">↺ Ripristina tutte</button>
+</div>
+
+<!-- TAVOLA -->
+<div class="sheet-wrap">
+  <div class="sheet-lbl" id="shLbl">Formato A3 Landscape — 420×297 mm · Campi header/footer/cartouche editabili · Attiva "Modifica Celle" per personalizzare i riquadri</div>
+
+  <div class="tavola" id="sheet">
+    <div class="abar"></div>
+
+    <!-- HEADER -->
+    <div class="hdr">
+      <div class="hdr-logo">
+        <div class="l-main">SCS</div>
+        <div class="l-sub">Studio Tecnico</div>
+      </div>
+      <div class="hdr-proj">
+        <div class="p-ey">Concorso di Progettazione</div>
+        <div class="p-ttl" contenteditable="true">Denominazione dell'intervento — Oggetto della gara</div>
+        <div class="p-sub" contenteditable="true">Committente: Comune di _______________ · CUP: _______________ · CIG: _______________</div>
+      </div>
+      <div class="hdr-meta">
+        <div class="mrow">
+          <div class="mcell"><div class="ml">Fase</div><div class="mv" contenteditable="true">P. di Fattibilità</div></div>
+          <div class="mcell"><div class="ml">Data</div><div class="mv" contenteditable="true">Maggio 2026</div></div>
+        </div>
+        <div class="mrow">
+          <div class="mcell"><div class="ml">Mandataria</div><div class="mv" contenteditable="true">SCS Srl Tra Prof.</div></div>
+          <div class="mcell"><div class="ml">Responsabile</div><div class="mv" contenteditable="true">Ing. F. Stortoni</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="body">
+      <div class="spine">
+        <span class="sp-lbl" id="spLbl">Tavola 01</span>
+        <div class="sp-line"></div>
+      </div>
+
+      <!-- GRID -->
+      <div class="cgrid" id="cgrid">
+
+        <!-- A -->
+        <div class="cell" id="c0" data-l="A" data-dt="Inquadramento" data-ds="1:5000">
+          <div class="cell-hdr">
+            <div class="cnum">A</div>
+            <div class="cttl" contenteditable="true">Inquadramento</div>
+            <div class="csc" contenteditable="true">1:5000</div>
+          </div>
+          <div class="cell-body">
+            <div class="phz">
+              <div class="north"><svg viewBox="0 0 20 20"><polygon points="10,1 14,19 10,15 6,19" fill="currentColor" opacity=".8"/><polygon points="10,1 6,19 10,15 14,19" fill="currentColor" opacity=".25"/></svg><span class="north-n">N</span></div>
+              <div class="phi">🗺</div><div class="pht">Planimetria inquadramento</div><div class="phs">CTR · 1:5000</div>
+              <div class="sbar"><div class="sbt"><div class="sbs"></div><div class="sbs"></div><div class="sbs"></div><div class="sbs"></div></div><div class="sbl"><span>0</span><span>250m</span><span>500m</span></div></div>
+            </div>
+          </div>
+          <div class="cov">
+            <div class="cov-lbl">Cella A</div>
+            <div class="cov-row">
+              <button class="cob del"  onclick="hideCell(0)">✕ Elimina</button>
+              <button class="cob ecol" onclick="toggleSpan(0,'col')" id="ec0">⟷ Espandi colonna</button>
+              <button class="cob erow" onclick="toggleSpan(0,'row')" id="er0">↕ Espandi riga</button>
+              <button class="cob rst"  onclick="resetCell(0)">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- B -->
+        <div class="cell" id="c1" data-l="B" data-dt="Stato di Fatto" data-ds="1:500">
+          <div class="cell-hdr">
+            <div class="cnum">B</div>
+            <div class="cttl" contenteditable="true">Stato di Fatto</div>
+            <div class="csc" contenteditable="true">1:500</div>
+          </div>
+          <div class="cell-body">
+            <div class="phz">
+              <div class="phi">📐</div><div class="pht">Rilievo planimetrico</div><div class="phs">CAD / BIM · 1:500</div>
+              <div class="sbar"><div class="sbt"><div class="sbs"></div><div class="sbs"></div><div class="sbs"></div><div class="sbs"></div></div><div class="sbl"><span>0</span><span>10m</span><span>20m</span></div></div>
+            </div>
+          </div>
+          <div class="cov">
+            <div class="cov-lbl">Cella B</div>
+            <div class="cov-row">
+              <button class="cob del"  onclick="hideCell(1)">✕ Elimina</button>
+              <button class="cob ecol" onclick="toggleSpan(1,'col')" id="ec1">⟷ Espandi colonna</button>
+              <button class="cob erow" onclick="toggleSpan(1,'row')" id="er1">↕ Espandi riga</button>
+              <button class="cob rst"  onclick="resetCell(1)">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- C -->
+        <div class="cell" id="c2" data-l="C" data-dt="Concept" data-ds="Schema">
+          <div class="cell-hdr">
+            <div class="cnum">C</div>
+            <div class="cttl" contenteditable="true">Concept</div>
+            <div class="csc" contenteditable="true">Schema</div>
+          </div>
+          <div class="cell-body">
+            <div class="phz">
+              <div class="phi">💡</div><div class="pht">Strategia progettuale</div><div class="phs">Diagrammi · Relazione</div>
+            </div>
+          </div>
+          <div class="cov">
+            <div class="cov-lbl">Cella C</div>
+            <div class="cov-row">
+              <button class="cob del"  onclick="hideCell(2)">✕ Elimina</button>
+              <button class="cob ecol" onclick="toggleSpan(2,'col')" id="ec2">⟷ Espandi colonna</button>
+              <button class="cob erow" onclick="toggleSpan(2,'row')" id="er2">↕ Espandi riga</button>
+              <button class="cob rst"  onclick="resetCell(2)">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- D -->
+        <div class="cell" id="c3" data-l="D" data-dt="Planimetria Progetto" data-ds="1:200">
+          <div class="cell-hdr">
+            <div class="cnum">D</div>
+            <div class="cttl" contenteditable="true">Planimetria Progetto</div>
+            <div class="csc" id="scLbl" contenteditable="true">1:200</div>
+          </div>
+          <div class="cell-body">
+            <div class="phz">
+              <div class="north"><svg viewBox="0 0 20 20"><polygon points="10,1 14,19 10,15 6,19" fill="currentColor" opacity=".8"/><polygon points="10,1 6,19 10,15 14,19" fill="currentColor" opacity=".25"/></svg><span class="north-n">N</span></div>
+              <div class="phi">🏗</div><div class="pht">Elaborato planimetrico</div><div class="phs">ArchiCAD 29 · 1:200</div>
+              <div class="sbar"><div class="sbt"><div class="sbs"></div><div class="sbs"></div><div class="sbs"></div><div class="sbs"></div></div><div class="sbl"><span>0</span><span>5m</span><span>10m</span></div></div>
+            </div>
+          </div>
+          <div class="cov">
+            <div class="cov-lbl">Cella D</div>
+            <div class="cov-row">
+              <button class="cob del"  onclick="hideCell(3)">✕ Elimina</button>
+              <button class="cob ecol" onclick="toggleSpan(3,'col')" id="ec3">⟷ Espandi colonna</button>
+              <button class="cob erow" onclick="toggleSpan(3,'row')" id="er3">↕ Espandi riga</button>
+              <button class="cob rst"  onclick="resetCell(3)">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- E -->
+        <div class="cell" id="c4" data-l="E" data-dt="Prospetti e Sezioni" data-ds="1:200">
+          <div class="cell-hdr">
+            <div class="cnum">E</div>
+            <div class="cttl" contenteditable="true">Prospetti e Sezioni</div>
+            <div class="csc" contenteditable="true">1:200</div>
+          </div>
+          <div class="cell-body">
+            <div class="phz">
+              <div class="phi">📏</div><div class="pht">Prospetto · Sezione A-A</div><div class="phs">1:200</div>
+            </div>
+          </div>
+          <div class="cov">
+            <div class="cov-lbl">Cella E</div>
+            <div class="cov-row">
+              <button class="cob del"  onclick="hideCell(4)">✕ Elimina</button>
+              <button class="cob ecol" onclick="toggleSpan(4,'col')" id="ec4">⟷ Espandi colonna</button>
+              <button class="cob erow" onclick="toggleSpan(4,'row')" id="er4">↕ Espandi riga</button>
+              <button class="cob rst"  onclick="resetCell(4)">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- F -->
+        <div class="cell" id="c5" data-l="F" data-dt="Visualizzazione" data-ds="Render">
+          <div class="cell-hdr">
+            <div class="cnum">F</div>
+            <div class="cttl" contenteditable="true">Visualizzazione</div>
+            <div class="csc" contenteditable="true">Render</div>
+          </div>
+          <div class="cell-body">
+            <div class="phz">
+              <div class="phi">🖼</div><div class="pht">Render / Vista 3D</div><div class="phs">Lumion · BIM View</div>
+            </div>
+          </div>
+          <div class="cov">
+            <div class="cov-lbl">Cella F</div>
+            <div class="cov-row">
+              <button class="cob del"  onclick="hideCell(5)">✕ Elimina</button>
+              <button class="cob ecol" onclick="toggleSpan(5,'col')" id="ec5">⟷ Espandi colonna</button>
+              <button class="cob erow" onclick="toggleSpan(5,'row')" id="er5">↕ Espandi riga</button>
+              <button class="cob rst"  onclick="resetCell(5)">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /cgrid -->
+
+      <!-- CARTOUCHE -->
+      <div class="cart">
+        <div class="cblk"><div class="clbl">N° Tavola</div><div class="cval big" id="cnum">01</div></div>
+        <div class="cblk"><div class="clbl">Titolo</div><div class="cval" contenteditable="true" style="font-size:clamp(3.5px,.45vw,6px)">Inquadramento, Stato di Fatto, Concept, Progetto</div></div>
+        <div class="cblk"><div class="clbl">Scala</div><div class="cval acc" id="cscale">1:200</div></div>
+        <div class="cblk"><div class="clbl">Formato</div><div class="cval">A3 · 420×297 mm</div></div>
+        <div class="cblk">
+          <div class="clbl">Revisioni</div>
+          <table class="revt">
+            <tr><th>Rev</th><th>Data</th><th>By</th></tr>
+            <tr><td>00</td><td>05/26</td><td>FS</td></tr>
+            <tr><td>—</td><td>—</td><td>—</td></tr>
+          </table>
+        </div>
+        <div class="cblk">
+          <div class="clbl">Progettista</div>
+          <div style="border-top:1px solid var(--border);padding-top:2px;margin-top:2px;">
+            <div class="cval" style="font-size:clamp(3px,.38vw,5px)">Ing. Francesco Stortoni</div>
+            <div class="cval" style="font-size:clamp(2.5px,.33vw,4.5px);color:var(--muted)">Ord. Ing. Macerata n. 1407</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /body -->
+
+    <!-- FOOTER -->
+    <div class="foot">
+      <div class="fcell"><div class="flbl">Committente</div><div class="fval" contenteditable="true">Comune di _______________ — Settore Lavori Pubblici</div></div>
+      <div class="fcell"><div class="flbl">Oggetto</div><div class="fval" contenteditable="true">Denominazione completa — CUP _______________</div></div>
+      <div class="fcell"><div class="flbl">RTP</div><div class="fval" contenteditable="true">SCS Srl · Dida Studio · RP Studio · Polo Progetti</div></div>
+      <div class="fcell"><div class="flbl">Normativa</div><div class="fval">D.Lgs. 36/2023 · NTC 2018 · ISO 19650</div></div>
+      <div class="fcell fpg"><div class="flbl">Tav.</div><div class="fval" id="fpg">01</div></div>
+    </div>
+    <div class="abar"></div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div class="gal-sec">
+  <div class="gal-ttl">Temi — clicca per applicare</div>
+  <div class="gal-grid" id="gallery"></div>
+</div>
+
+<!-- INFO -->
+<div class="info-sec">
+  <div>
+    <div class="il">Modifica celle</div>
+    <div class="ii"><strong>1.</strong> Attiva "Modifica Celle" in toolbar</div>
+    <div class="ii"><strong>✕ Elimina</strong> — nasconde il riquadro</div>
+    <div class="ii"><strong>⟷ Espandi colonna</strong> — occupa 2 col.</div>
+    <div class="ii"><strong>↕ Espandi riga</strong> — occupa 2 righe</div>
+    <div class="ii"><strong>↺ Reset</strong> — azzera span e testi</div>
+    <div class="ii"><strong>Barra gialla</strong> — ripristina celle eliminate</div>
+  </div>
+  <div>
+    <div class="il">Testi editabili</div>
+    <div class="ii">Con edit mode <strong>OFF</strong>: titolo e scala di ogni cella sono editabili direttamente</div>
+    <div class="ii">Header, footer e cartouche sono <strong>sempre</strong> editabili</div>
+    <div class="ii">Clicca e scrivi — no doppio click necessario</div>
+  </div>
+  <div>
+    <div class="il">Layout grid</div>
+    <div class="ii"><strong>2×3</strong> · 6 riquadri standard</div>
+    <div class="ii"><strong>1×3</strong> · 3 riquadri alti (concept)</div>
+    <div class="ii"><strong>2×2</strong> · 4 riquadri focus</div>
+    <div class="ii"><strong>Zona unica</strong> · 1 campo libero</div>
+    <div class="ii"><strong>Custom</strong> · elimina + espandi liberamente</div>
+  </div>
+  <div>
+    <div class="il">Export</div>
+    <div class="ii"><strong>⎙ PDF</strong> — stampa: salva come PDF A3</div>
+    <div class="ii">Toolbar e gallery sono nascosti in stampa</div>
+    <div class="ii">Usa come guida per InDesign / Illustrator</div>
+    <div class="ii">Esporta elaborati CAD da ArchiCAD come PDF</div>
+    <div class="ii">Risoluzione stampa target: ≥300 dpi</div>
+  </div>
+</div>
+
+<script>
+/* ── THEMES ─────────────────────────────────────────────────── */
+const TH = [
+  {id:'navy-gold',   name:'Navy / Gold',      font:'Helvetica Neue',    fs:'"Helvetica Neue",Helvetica,Arial,sans-serif',         fl:'"Helvetica Neue",Helvetica,Arial,sans-serif',         desc:'Autorità · Concorsi pubblici',   dark:false,navy:'#1A2B4A',ac:'#2B5EA7',gold:'#C8A84B',lt:'#F4F5F7',bd:'#CBD0D8',tx:'#1C1C1C',mu:'#6B7280',wh:'#FFFFFF',sw:['#1A2B4A','#2B5EA7','#C8A84B','#F4F5F7','#CBD0D8']},
+  {id:'slate-teal',  name:'Slate / Teal',     font:'DM Sans',           fs:'"DM Sans","Helvetica Neue",Arial,sans-serif',          fl:'"DM Sans","Helvetica Neue",Arial,sans-serif',          desc:'Rigenerazione · PNRR',           dark:false,navy:'#1B3A3A',ac:'#007A6A',gold:'#2BBFAA',lt:'#EDF5F4',bd:'#A8CFCA',tx:'#0F2020',mu:'#5A8080',wh:'#F8FFFE',sw:['#1B3A3A','#007A6A','#2BBFAA','#EDF5F4','#A8CFCA']},
+  {id:'graphite-red',name:'Graphite / Red',   font:'Space Grotesk',     fs:'"Space Grotesk","Helvetica Neue",Arial,sans-serif',    fl:'"Space Grotesk","Helvetica Neue",Arial,sans-serif',    desc:'Strutturale · Tecnicismo',        dark:false,navy:'#242424',ac:'#C0392B',gold:'#E74C3C',lt:'#F5F5F5',bd:'#CCCCCC',tx:'#1A1A1A',mu:'#777777',wh:'#FFFFFF',sw:['#242424','#C0392B','#E74C3C','#F5F5F5','#CCCCCC']},
+  {id:'warm-stone',  name:'Warm Stone',       font:'Libre Baskerville', fs:'"Libre Baskerville",Georgia,serif',                    fl:'"Helvetica Neue",Helvetica,Arial,sans-serif',         desc:'Restauro · Centri storici',       dark:false,navy:'#3D2B1F',ac:'#7B5B3A',gold:'#B8956A',lt:'#F7F3EF',bd:'#D6C4B0',tx:'#2A1A0E',mu:'#8A7060',wh:'#FDFAF7',sw:['#3D2B1F','#7B5B3A','#B8956A','#F7F3EF','#D6C4B0']},
+  {id:'ibm-blue',    name:'IBM Blue / Mono',  font:'IBM Plex Sans',     fs:'"IBM Plex Sans","Helvetica Neue",Arial,sans-serif',    fl:'"IBM Plex Mono","Courier New",monospace',             desc:'BIM · Digital Twin',             dark:false,navy:'#0043CE',ac:'#0062FF',gold:'#00B0FF',lt:'#EDF5FF',bd:'#A6C8FF',tx:'#161616',mu:'#525252',wh:'#FFFFFF',sw:['#0043CE','#0062FF','#00B0FF','#EDF5FF','#A6C8FF']},
+  {id:'noir-gold',   name:'Noir / Gold',      font:'Cormorant Garamond',fs:'"Cormorant Garamond",Georgia,serif',                   fl:'"Helvetica Neue",Helvetica,Arial,sans-serif',         desc:'Concorsi di idee · Impatto',     dark:true, navy:'#0D0D0D',ac:'#1F1F1F',gold:'#D4A843',lt:'#F0EDE8',bd:'#2E2E2E',tx:'#EFEFEF',mu:'#888888',wh:'#141414',sw:['#0D0D0D','#1F1F1F','#D4A843','#F0EDE8','#2E2E2E']},
+  {id:'sage-white',  name:'Sage / White',     font:'Outfit',            fs:'"Outfit","Helvetica Neue",Arial,sans-serif',            fl:'"Outfit","Helvetica Neue",Arial,sans-serif',            desc:'Paesaggio · Verde urbano',        dark:false,navy:'#2D4A3E',ac:'#4A7C59',gold:'#8FBF6A',lt:'#F0F5EE',bd:'#B8D4B0',tx:'#1A2E1F',mu:'#6B8C72',wh:'#FAFFF8',sw:['#2D4A3E','#4A7C59','#8FBF6A','#F0F5EE','#B8D4B0']},
+  {id:'minimal-bw',  name:'Minimal B/N',      font:'Helvetica Neue',    fs:'"Helvetica Neue",Helvetica,Arial,sans-serif',          fl:'"Helvetica Neue",Helvetica,Arial,sans-serif',          desc:'Neutralità totale',               dark:false,navy:'#111111',ac:'#444444',gold:'#999999',lt:'#F8F8F8',bd:'#DEDEDE',tx:'#111111',mu:'#777777',wh:'#FFFFFF',sw:['#111111','#444444','#999999','#F8F8F8','#DEDEDE']}
+];
+let activeT = 'navy-gold';
+
+function applyTheme(id) {
+  const t = TH.find(x=>x.id===id); if(!t)return;
+  activeT = id;
+  const r = document.documentElement.style;
+  r.setProperty('--navy',t.navy); r.setProperty('--accent',t.ac);
+  r.setProperty('--gold',t.gold); r.setProperty('--light',t.lt);
+  r.setProperty('--border',t.bd); r.setProperty('--text',t.tx);
+  r.setProperty('--muted',t.mu);  r.setProperty('--white',t.wh);
+  r.setProperty('--font',t.fs);   r.setProperty('--font-label',t.fl);
+  document.querySelectorAll('.tcard').forEach(c=>c.classList.toggle('on',c.dataset.id===id));
+}
+
+function buildGallery() {
+  const g = document.getElementById('gallery');
+  TH.forEach(t => {
+    const c = document.createElement('div');
+    c.className = 'tcard'+(t.id===activeT?' on':'');
+    c.dataset.id = t.id;
+    c.onclick = ()=>applyTheme(t.id);
+    const bg = t.dark?t.wh:'#FAFAFA', fg=t.dark?t.tx:t.navy, mu=t.mu;
+    c.innerHTML = `
+      <div class="tc-hdr">
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-font">${t.font}</div>
+        <div class="tc-desc">${t.desc}</div>
+      </div>
+      <div class="tc-sw">${t.sw.map(s=>`<div class="tc-s" style="background:${s}"></div>`).join('')}</div>
+      <div class="tc-prev" style="background:${bg}">
+        <div class="tcp-lbl" style="color:${t.ac};font-family:${t.fl}">Progetto · 2026</div>
+        <div class="tcp-ttl" style="color:${fg};font-family:${t.fs}">Riqualificazione Urbana</div>
+        <div class="tcp-sub" style="color:${mu};font-family:${t.fs}">SCS Srl — Ing. F. Stortoni</div>
+      </div>`;
+    g.appendChild(c);
+  });
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+const hidden = new Set();
+
+function switchLayout(l) {
+  const grid = document.getElementById('cgrid');
+  const cells = [...grid.querySelectorAll('.cell')];
+  cells.forEach(c=>{c.classList.remove('gone','sc2','sr2');});
+  hidden.clear();
+
+  if(l==='2x3'){grid.style.gridTemplateColumns='1fr 1fr 1fr';grid.style.gridTemplateRows='1fr 1fr';}
+  else if(l==='1x3'){grid.style.gridTemplateColumns='1fr 1fr 1fr';grid.style.gridTemplateRows='1fr';cells.forEach((c,i)=>{if(i>=3){c.classList.add('gone');hidden.add(i);}});}
+  else if(l==='2x2'){grid.style.gridTemplateColumns='1fr 1fr';grid.style.gridTemplateRows='1fr 1fr';cells.forEach((c,i)=>{if(i>=4){c.classList.add('gone');hidden.add(i);}});}
+  else if(l==='free'){grid.style.gridTemplateColumns='1fr';grid.style.gridTemplateRows='1fr';cells.forEach((c,i)=>{if(i>0){c.classList.add('gone');hidden.add(i);}});}
+  refreshBar();
+}
+
+/* ── EDIT MODE ──────────────────────────────────────────────── */
+let em = false;
+function toggleEM() {
+  em = !em;
+  const sheet = document.getElementById('sheet');
+  const btn   = document.getElementById('emBtn');
+  sheet.classList.toggle('em', em);
+  btn.classList.toggle('edit-on', em);
+  btn.textContent = em ? '✓ Fine modifica' : '✏️ Modifica Celle';
+  document.getElementById('shLbl').textContent = em
+    ? 'MODALITÀ MODIFICA CELLE — Clicca su un riquadro per eliminarlo, espanderlo o resettarlo'
+    : 'Formato A3 Landscape — 420×297 mm · Campi header/footer/cartouche editabili · Attiva "Modifica Celle" per personalizzare i riquadri';
+}
+
+/* ── CELL OPS ───────────────────────────────────────────────── */
+function hideCell(i) {
+  document.getElementById('c'+i).classList.add('gone');
+  hidden.add(i);
+  refreshBar();
+}
+function restoreCell(i) {
+  document.getElementById('c'+i).classList.remove('gone');
+  hidden.delete(i);
+  refreshBar();
+}
+function restoreAll() {
+  for(let i=0;i<6;i++) document.getElementById('c'+i).classList.remove('gone');
+  hidden.clear();
+  refreshBar();
+}
+function toggleSpan(i, dir) {
+  const c = document.getElementById('c'+i);
+  if(dir==='col'){
+    c.classList.toggle('sc2');
+    c.classList.remove('sr2');
+    document.getElementById('ec'+i).textContent = c.classList.contains('sc2') ? '⟷ Riduci colonna' : '⟷ Espandi colonna';
+    document.getElementById('er'+i).textContent = '↕ Espandi riga';
+  } else {
+    c.classList.toggle('sr2');
+    c.classList.remove('sc2');
+    document.getElementById('er'+i).textContent = c.classList.contains('sr2') ? '↕ Riduci riga' : '↕ Espandi riga';
+    document.getElementById('ec'+i).textContent = '⟷ Espandi colonna';
+  }
+}
+function resetCell(i) {
+  const c = document.getElementById('c'+i);
+  c.classList.remove('sc2','sr2');
+  c.querySelector('.cttl').textContent = c.dataset.dt || '';
+  c.querySelector('.csc').textContent  = c.dataset.ds || '';
+  document.getElementById('ec'+i).textContent = '⟷ Espandi colonna';
+  document.getElementById('er'+i).textContent = '↕ Espandi riga';
+}
+
+function refreshBar() {
+  const bar   = document.getElementById('rbar');
+  const chips = document.getElementById('rchips');
+  chips.innerHTML = '';
+  if(hidden.size===0){bar.classList.remove('on');return;}
+  bar.classList.add('on');
+  hidden.forEach(i=>{
+    const cell = document.getElementById('c'+i);
+    const ltr  = cell?.dataset.l || String.fromCharCode(65+i);
+    const ttl  = cell?.querySelector('.cttl')?.textContent || '';
+    const chip = document.createElement('span');
+    chip.className   = 'rb-chip';
+    chip.textContent = `↺ ${ltr} — ${ttl}`;
+    chip.onclick     = ()=>restoreCell(i);
+    chips.appendChild(chip);
+  });
+}
+
+/* ── META ────────────────────────────────────────────────────── */
+function updateMeta() {
+  const n = (document.getElementById('tavNum').value||'01').padStart(2,'0');
+  const s = document.getElementById('scaleSel').value;
+  document.getElementById('cnum').textContent   = n;
+  document.getElementById('fpg').textContent    = n;
+  document.getElementById('cscale').textContent = s;
+  const sl = document.getElementById('scLbl'); if(sl) sl.textContent = s;
+  document.getElementById('spLbl').textContent  = 'Tavola '+n;
+}
+
+function showGuide(){
+  alert('TAVOLA A3 — Guida\n\n' +
+  '── MODIFICA CELLE ──\n' +
+  'Attiva il pulsante "Modifica Celle" in toolbar.\n' +
+  'Su ogni riquadro appare un overlay con 4 azioni:\n' +
+  '  ✕ Elimina → nasconde il riquadro\n' +
+  '  ⟷ Espandi colonna → occupa 2 colonne (ri-clicca per ridurre)\n' +
+  '  ↕ Espandi riga → occupa 2 righe (ri-clicca per ridurre)\n' +
+  '  ↺ Reset → ripristina testi e dimensione originale\n\n' +
+  'Le celle eliminate appaiono nella barra arancione.\n' +
+  'Cliccale per ripristinarle singolarmente, o usa "Ripristina tutte".\n\n' +
+  '── TESTI ──\n' +
+  'Con la modalità modifica OFF:\n' +
+  'titolo e scala di ogni cella sono editabili direttamente.\n' +
+  'Header, footer, cartouche: sempre editabili.\n\n' +
+  '── EXPORT ──\n' +
+  'File → Stampa → Salva come PDF → A3 Landscape.\n' +
+  'Toolbar e gallery vengono nascosti automaticamente.');
+}
+
+/* ── INIT ────────────────────────────────────────────────────── */
+buildGallery();
+updateMeta();
+</script>
+</body>
+</html>
