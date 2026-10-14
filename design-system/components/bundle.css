@@ -1,0 +1,121 @@
+/* SCS Studio Tecnico — stili di impaginazione (tavola A3, slide 16:9).
+   Tutte le misure della tavola sono px di riferimento su 1587px (= 420mm @96dpi),
+   scalate con il contenitore: --tv = 1px di riferimento. */
+
+.scs-ctx, .scs-tavola { container-type: inline-size; }
+.scs-ctx *, .scs-tavola *, .scs-slide * { box-sizing: border-box; }
+.scs-ctx, .scs-tavola, .scs-slide { --tv: calc(100cqw / 1587); font-family: var(--font-sans); color: var(--ink); }
+
+/* ── Testi ─────────────────────────────────────────────── */
+.scs-label { font-size: calc(var(--tv) * 8); line-height: 1.25; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-muted); }
+.scs-value { font-size: calc(var(--tv) * 12); line-height: 1.33; font-weight: 500; color: var(--ink); }
+.scs-note  { font-size: calc(var(--tv) * 10); line-height: 1.3; color: var(--ink-muted); }
+.scs-eyebrow { font-size: calc(var(--tv) * 9); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--blue-ink); }
+[contenteditable]:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+/* ── Tavola A3 ─────────────────────────────────────────── */
+.scs-tavola { width: 100%; aspect-ratio: 420 / 297; background: var(--paper); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.scs-tavola-in { flex: 1; display: flex; flex-direction: column; margin: calc(var(--tv) * 24); border: calc(var(--tv) * 2) solid var(--rule); min-height: 0; }
+
+/* Banda bicolore: firma SCS, azzurro + verde come i due fogli del marchio */
+.scs-band { display: flex; height: calc(var(--tv) * 6); flex-shrink: 0; }
+.scs-band > i { flex: 1; background: var(--scs-blue); }
+.scs-band > i + i { background: var(--scs-green); }
+
+/* Intestazione */
+.scs-hdr { display: flex; height: calc(var(--tv) * 132); border-bottom: calc(var(--tv) * 2) solid var(--rule); flex-shrink: 0; }
+.scs-hdr-logo { width: calc(var(--tv) * 300); display: flex; align-items: center; justify-content: center; border-right: calc(var(--tv) * 1) solid var(--line); background: #ffffff; padding: 0 calc(var(--tv) * 12); }
+.scs-hdr-logo img { width: 100%; aspect-ratio: 3 / 1; object-fit: cover; display: block; }
+.scs-hdr-proj { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: calc(var(--tv) * 6); padding: 0 calc(var(--tv) * 24); border-right: calc(var(--tv) * 1) solid var(--line); min-width: 0; }
+.scs-hdr-title { font-size: calc(var(--tv) * 24); line-height: 1.17; font-weight: 700; color: var(--ink); }
+.scs-hdr-sub { font-size: calc(var(--tv) * 11); line-height: 1.3; color: var(--ink-muted); }
+.scs-hdr-meta { width: calc(var(--tv) * 380); display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.scs-hdr-meta > div { display: flex; flex-direction: column; justify-content: center; gap: calc(var(--tv) * 4); padding: 0 calc(var(--tv) * 12); border-right: calc(var(--tv) * 1) solid var(--line); border-bottom: calc(var(--tv) * 1) solid var(--line); }
+.scs-hdr-meta > div:nth-child(2n) { border-right: 0; }
+.scs-hdr-meta > div:nth-child(n+3) { border-bottom: 0; }
+.scs-hdr-cert { width: calc(var(--tv) * 112); display: flex; align-items: center; justify-content: center; border-left: calc(var(--tv) * 1) solid var(--line); background: #ffffff; padding: calc(var(--tv) * 10); }
+.scs-hdr-cert img { height: 100%; width: auto; display: block; }
+
+/* Corpo */
+.scs-body { flex: 1; display: flex; min-height: 0; }
+.scs-spine { width: calc(var(--tv) * 44); background: var(--cqy-navy); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.scs-spine::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: calc(var(--tv) * 6); background: linear-gradient(var(--scs-blue) 0 50%, var(--scs-green) 50% 100%); }
+.scs-spine span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: calc(var(--tv) * 9); font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--on-navy); }
+
+.scs-grid { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); min-width: 0; }
+.scs-grid.g-1x3 { grid-template-rows: 1fr; }
+.scs-grid.g-2x2 { grid-template-columns: repeat(2, 1fr); }
+.scs-grid.g-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+
+/* Riquadro */
+.scs-cell { display: flex; flex-direction: column; border-right: calc(var(--tv) * 1) solid var(--line); border-bottom: calc(var(--tv) * 1) solid var(--line); background: var(--paper); min-width: 0; min-height: 0; }
+.scs-cell.span-c { grid-column: span 2; }
+.scs-cell.span-r { grid-row: span 2; }
+.scs-cell-hdr { display: flex; align-items: center; gap: calc(var(--tv) * 8); padding: calc(var(--tv) * 6) calc(var(--tv) * 10); background: var(--paper-alt); border-bottom: calc(var(--tv) * 1) solid var(--rule); flex-shrink: 0; }
+.scs-chip { width: calc(var(--tv) * 20); height: calc(var(--tv) * 20); border-radius: var(--radius-xs); background: var(--cqy-navy); color: var(--on-navy); display: flex; align-items: center; justify-content: center; font-size: calc(var(--tv) * 10); font-weight: 700; flex-shrink: 0; }
+.scs-cell-title { font-size: calc(var(--tv) * 12); line-height: 1.15; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.scs-cell-scale { margin-left: auto; font-size: calc(var(--tv) * 10); font-weight: 700; letter-spacing: .06em; color: var(--blue-ink); white-space: nowrap; }
+.scs-cell-body { flex: 1; position: relative; padding: calc(var(--tv) * 12); min-height: 0; display: flex; }
+.scs-cell-body > img { width: 100%; height: 100%; object-fit: contain; }
+.scs-ph { flex: 1; border: calc(var(--tv) * 1) dashed var(--line); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--tv) * 4); position: relative; }
+
+/* Simboli: nord e scala grafica */
+.scs-north { position: absolute; top: calc(var(--tv) * 10); right: calc(var(--tv) * 10); display: flex; flex-direction: column; align-items: center; gap: calc(var(--tv) * 2); color: var(--ink); }
+.scs-north svg { width: calc(var(--tv) * 22); height: calc(var(--tv) * 22); display: block; }
+.scs-north svg .n-fill { fill: var(--ink); }
+.scs-north svg .n-ring { fill: none; stroke: var(--ink); stroke-width: 1; }
+.scs-north b { font-size: calc(var(--tv) * 9); font-weight: 700; }
+.scs-scalebar { position: absolute; left: calc(var(--tv) * 10); bottom: calc(var(--tv) * 10); display: flex; flex-direction: column; gap: calc(var(--tv) * 3); }
+.scs-scalebar .bars { display: flex; height: calc(var(--tv) * 5); }
+.scs-scalebar .bars i { width: calc(var(--tv) * 36); border: calc(var(--tv) * 1) solid var(--ink); }
+.scs-scalebar .bars i:nth-child(odd) { background: var(--ink); }
+.scs-scalebar .ticks { display: flex; justify-content: space-between; font-size: calc(var(--tv) * 8); color: var(--ink); }
+
+/* Cartiglio */
+.scs-cart { width: calc(var(--tv) * 190); border-left: calc(var(--tv) * 2) solid var(--rule); display: flex; flex-direction: column; flex-shrink: 0; background: var(--paper); }
+.scs-cblk { display: flex; flex-direction: column; gap: calc(var(--tv) * 4); padding: calc(var(--tv) * 10) calc(var(--tv) * 12); border-bottom: calc(var(--tv) * 1) solid var(--line); }
+.scs-cblk:last-child { border-bottom: 0; flex: 1; justify-content: flex-end; }
+.scs-cblk .num { font-size: calc(var(--tv) * 40); line-height: 1; font-weight: 700; color: var(--cqy-navy); }
+.scs-cblk .acc { color: var(--blue-ink); font-weight: 700; }
+.scs-rev { width: 100%; border-collapse: collapse; font-size: calc(var(--tv) * 9); }
+.scs-rev th { text-align: left; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-muted); border-bottom: calc(var(--tv) * 1) solid var(--rule); padding: calc(var(--tv) * 2) calc(var(--tv) * 3); font-size: calc(var(--tv) * 7); }
+.scs-rev td { padding: calc(var(--tv) * 3); border-bottom: calc(var(--tv) * 1) solid var(--line); color: var(--ink); }
+.scs-rev tr.cur td:first-child::before { content: ""; display: inline-block; width: calc(var(--tv) * 5); height: calc(var(--tv) * 5); border-radius: var(--radius-round); background: var(--cqy-cyan); margin-right: calc(var(--tv) * 4); vertical-align: middle; }
+
+/* Piè di tavola */
+.scs-foot { display: flex; height: calc(var(--tv) * 64); border-top: calc(var(--tv) * 2) solid var(--rule); background: var(--paper-alt); flex-shrink: 0; }
+.scs-fcell { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: calc(var(--tv) * 4); padding: 0 calc(var(--tv) * 14); border-right: calc(var(--tv) * 1) solid var(--line); min-width: 0; }
+.scs-fpg { flex: 0 0 calc(var(--tv) * 110); background: var(--cqy-navy); align-items: center; border-right: 0; }
+.scs-fpg .scs-label { color: var(--on-navy); }
+.scs-fpg .pg { font-size: calc(var(--tv) * 28); line-height: 1; font-weight: 700; color: var(--on-navy); }
+
+/* ── Doppia cornice (motivo del marchio) ──────────────── */
+.scs-frames { position: relative; }
+.scs-frames::before, .scs-frames::after { content: ""; position: absolute; border: var(--fw, 6px) solid; }
+.scs-frames::before { border-color: var(--scs-blue); inset: 0 0 var(--fo, 32px) var(--fo, 32px); }
+.scs-frames::after { border-color: var(--scs-green); inset: var(--fo, 32px) var(--fo, 32px) 0 0; }
+
+/* ── Slide 16:9 ────────────────────────────────────────── */
+.scs-slide { container-type: inline-size; width: 100%; aspect-ratio: 16 / 9; background: var(--paper); position: relative; overflow: hidden; --sl: calc(100cqw / 1920); }
+.scs-slide-band { position: absolute; left: 0; right: 0; bottom: 0; }
+.scs-slide-band.scs-band { height: calc(var(--sl) * 12); }
+.scs-slide-words { position: absolute; left: calc(var(--sl) * 120); bottom: calc(var(--sl) * 150); width: calc(var(--sl) * 980); display: flex; flex-direction: column; gap: calc(var(--sl) * 24); }
+.scs-slide .eyebrow { font-size: calc(var(--sl) * 18); font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--blue-ink); }
+.scs-slide .display { font-size: calc(var(--sl) * 96); line-height: 1; font-weight: 700; letter-spacing: -.02em; color: var(--ink); margin: 0; }
+.scs-slide .lead { font-size: calc(var(--sl) * 30); line-height: 1.33; color: var(--ink-muted); margin: 0; }
+.scs-slide-logo { position: absolute; left: calc(var(--sl) * 96); top: calc(var(--sl) * 72); width: calc(var(--sl) * 420); background: #ffffff; }
+.scs-slide-logo img { width: 100%; aspect-ratio: 3 / 1; object-fit: cover; display: block; }
+.scs-slide-cert { position: absolute; right: calc(var(--sl) * 96); top: calc(var(--sl) * 72); height: calc(var(--sl) * 150); background: #ffffff; padding: calc(var(--sl) * 8); }
+.scs-slide-cert img { height: 100%; display: block; }
+.scs-slide-art { position: absolute; right: calc(var(--sl) * 120); bottom: calc(var(--sl) * 150); width: calc(var(--sl) * 560); height: calc(var(--sl) * 520); --fw: calc(var(--sl) * 18); --fo: calc(var(--sl) * 96); }
+.scs-slide-meta { position: absolute; left: calc(var(--sl) * 120); right: calc(var(--sl) * 120); bottom: calc(var(--sl) * 48); display: flex; gap: calc(var(--sl) * 64); font-size: calc(var(--sl) * 16); color: var(--ink-muted); }
+.scs-slide-meta b { display: block; font-size: calc(var(--sl) * 11); letter-spacing: .2em; text-transform: uppercase; margin-bottom: calc(var(--sl) * 6); }
+
+/* ── Marchio qualità (CQY) ─────────────────────────────── */
+.scs-cert { display: inline-flex; align-items: center; gap: 16px; padding: 12px 16px; background: #ffffff; border: 1px solid var(--line); }
+.scs-cert img { height: 96px; width: auto; display: block; }
+
+@media print {
+  .scs-tavola { break-inside: avoid; }
+  [contenteditable]:focus-visible { outline: none; }
+}

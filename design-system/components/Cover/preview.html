@@ -1,0 +1,52 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>SCS Studio Tecnico</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--paper); color:var(--ink); font-family:var(--font-sans); overflow:hidden; }
+  .cover { position:relative; height:288px; overflow:hidden; }
+  .art { position:absolute; top:0; left:480px; width:480px; height:288px; }
+  .art svg { display:block; width:480px; height:288px; }
+  .blue  { fill:var(--scs-blue); }
+  .green { fill:var(--scs-green); }
+  .navy  { fill:var(--cqy-navy); }
+  .ink   { fill:var(--ink); }
+  .cyan  { fill:var(--cqy-cyan); }
+  .blk   { rx:var(--radius-none); }
+  .f-blue  { fill:none; stroke:var(--scs-blue); stroke-width:var(--stroke-frame); }
+  .f-green { fill:none; stroke:var(--scs-green); stroke-width:var(--stroke-frame); }
+  .words { position:absolute; left:var(--space-12); bottom:var(--space-12); max-width:400px; }
+  .name { margin:0; font-size:72px; line-height:.95; font-weight:700; letter-spacing:-.02em; color:var(--ink); }
+  .tag { margin:var(--space-3) 0 0 2px; font-size:14px; line-height:20px; color:var(--ink-muted); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      scs-blue 192×96 bled off the top · scs-green 192×144 bled off the bottom · cqy-navy 144×288 full-height slab bleeding off the right · ink 96×96 · cqy-cyan 96×96 (signal, kept small) — ≈38% of 960×288
+  arrangement flush modular grid on a space-12 (48px) module, one tall navy slab with blue/green/ink/cyan satellites, square corners (radius-none)
+  pattern     literal motif row: the SCS mark's two offset sheets — a scs-blue frame behind, a scs-green frame in front, stroke-frame, offset ~space-6, with the mark's short blue bar — drawn over the navy slab
+  scales      module space-12; frame offset 20×24 ≈ space-6; stroke stroke-frame; corners radius-none
+-->
+<rect class="blue blk"  x="144" y="0"   width="192" height="96"/>
+<rect class="green blk" x="48"  y="144" width="192" height="144"/>
+<rect class="cyan blk"  x="240" y="96"  width="96"  height="96"/>
+<rect class="ink blk"   x="240" y="192" width="96"  height="96"/>
+<rect class="navy blk"  x="336" y="0"   width="144" height="288"/>
+<rect class="f-blue"  x="376" y="48"  width="80" height="104"/>
+<rect class="f-green" x="356" y="72"  width="80" height="104"/>
+<rect class="blue"    x="380" y="150" width="40" height="6"/>
+</svg>
+</div>
+<div class="words">
+  <h1 class="name">SCS Studio<br>Tecnico</h1>
+  <p class="tag">Tavole e presentazioni di progetto per enti e committenti.</p>
+</div>
+</div>
+</body>
+</html>
